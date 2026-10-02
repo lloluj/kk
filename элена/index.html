@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Просто потому что ты классная ✨</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --pink: #ff6b9d;
+    --pink-light: #ffa8c5;
+    --dark: #0f0f1e;
+    --dark-2: #1a1a2e;
+  }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 50%, #16213e 100%);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== Фоновые частицы ===== */
+  .particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    animation: floatUp linear infinite;
+    filter: blur(0.3px);
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) scale(1.2) rotate(360deg); opacity: 0; }
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 90px 20px 50px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 6vw, 60px);
+    background: linear-gradient(90deg, var(--pink), var(--pink-light), var(--pink));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shine 4s linear infinite, fadeIn 1.2s ease;
+    margin-bottom: 18px;
+    line-height: 1.2;
+  }
+  @keyframes shine { to { background-position: 200% center; } }
+  .hero p {
+    font-size: clamp(16px, 2vw, 20px);
+    color: #c9d1e0;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.6;
+    animation: fadeIn 1.8s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== Галерея ===== */
+  .gallery {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 40px 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .photo-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: transform 0.5s cubic-bezier(.2,.8,.2,1), box-shadow 0.5s ease;
+    aspect-ratio: 3 / 4;
+    background: #222;
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  .photo-card.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.2,.8,.2,1), box-shadow 0.5s ease;
+  }
+  .photo-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 25px 60px rgba(255, 105, 180, 0.35);
+  }
+  .photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(.2,.8,.2,1);
+  }
+  .photo-card:hover img { transform: scale(1.1); }
+  .photo-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .photo-card:hover::after { opacity: 1; }
+  .photo-card .caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 22px;
+    font-size: 18px;
+    color: #fff;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .photo-card:hover .caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== Причины ===== */
+  .reasons-title {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    font-size: clamp(22px, 3vw, 30px);
+    color: var(--pink-light);
+    margin: 40px 20px 10px;
+    animation: fadeIn 1s ease;
+  }
+  .reasons {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 30px 24px 40px;
+    display: grid;
+    gap: 16px;
+  }
+  .reason {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 105, 180, 0.25);
+    border-radius: 16px;
+    padding: 20px 24px;
+    font-size: clamp(15px, 2vw, 18px);
+    color: #e0e6f0;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  .reason.visible {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease, background 0.3s ease;
+  }
+  .reason:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 30px rgba(255, 105, 180, 0.2);
+    background: rgba(255, 105, 180, 0.08);
+  }
+  .reason .emoji {
+    font-size: 28px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+  .reason:hover .emoji { transform: scale(1.2) rotate(-8deg); }
+
+  /* ===== Блок комплиментов ===== */
+  .compliment-section {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 20px 20px 60px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .compliment-title {
+    font-size: clamp(22px, 3vw, 30px);
+    color: var(--pink-light);
+    margin-bottom: 24px;
+  }
+  .compliment-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 105, 180, 0.3);
+    border-radius: 20px;
+    padding: 36px 28px;
+    font-size: clamp(17px, 2.4vw, 21px);
+    color: #fff;
+    line-height: 1.6;
+    min-height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  .compliment-box.pop {
+    animation: pop 0.45s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); box-shadow: 0 15px 45px rgba(255, 105, 180, 0.35); }
+    100% { transform: scale(1); }
+  }
+
+  /* ===== Финальный блок ===== */
+  .final {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 50px 20px 100px;
+  }
+  .final p {
+    font-size: clamp(20px, 3vw, 28px);
+    color: var(--pink-light);
+    font-style: italic;
+    max-width: 720px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+  }
+  .btn {
+    display: inline-block;
+    padding: 16px 40px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--pink), #ff8fb1);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 25px rgba(255, 107, 157, 0.45);
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    transition: left 0.6s ease;
+  }
+  .btn:hover::before { left: 100%; }
+  .btn:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 16px 40px rgba(255, 107, 157, 0.65);
+  }
+  .btn:active { transform: translateY(-1px) scale(0.99); }
+
+  /* ===== Лайтбокс ===== */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+    cursor: zoom-out;
+    backdrop-filter: blur(6px);
+  }
+  .lightbox.active { display: flex; }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow: 0 20px 70px rgba(255, 105, 180, 0.45);
+    animation: zoomIn 0.35s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes zoomIn {
+    from { transform: scale(0.75); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .lightbox .close {
+    position: absolute;
+    top: 20px; right: 24px;
+    font-size: 36px;
+    color: #fff;
+    opacity: 0.7;
+    transition: opacity 0.2s, transform 0.2s;
+    user-select: none;
+  }
+  .lightbox .close:hover { opacity: 1; transform: rotate(90deg); }
+
+  /* ===== Адаптив ===== */
+  @media (max-width: 600px) {
+    .gallery { padding: 20px; gap: 14px; }
+    .reason { padding: 16px 18px; gap: 12px; }
+    .reason .emoji { font-size: 24px; }
+    .hero { padding: 60px 20px 30px; }
+    .compliment-box { padding: 28px 20px; min-height: 110px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Фоновые частицы -->
+  <div class="particles" id="particles"></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Просто потому что ты есть✨</h1>
+    <p>Никакого повода. Просто захотелось сказать тебе несколько тёплых слов — и показать, какая ты красивая.</p>
+  </section>
+
+  <!-- ГАЛЕРЕЯ -->
+  <section class="gallery" id="gallery">
+    <div class="photo-card"><img src="/2.jpg" alt="Фото 1" /><div class="caption">Самая красивая</div></div>
+    <div class="photo-card"><img src="/4.jpg" alt="Фото 2" /><div class="caption">Твоя улыбка</div></div>
+    <div class="photo-card"><img src="/8.jpg" alt="Фото 3" /><div class="caption">Сексуальная</div></div>
+    <div class="photo-card"><img src="/2.jpg" alt="Фото 4" /><div class="caption">Здесь ты особенно красива</div></div>
+    <div class="photo-card"><img src="/1.jpg" alt="Фото 5" /><div class="caption">Прелестная</div></div>
+    <div class="photo-card"><img src="/3.jpg" alt="Фото 6" /><div class="caption">Модель</div></div>
+  </section>
+
+  <!-- ПРИЧИНЫ -->
+  <h2 class="reasons-title">Почему ты классная 💫</h2>
+  <section class="reasons" id="reasons">
+    <div class="reason"><span class="emoji">😊</span><span>Ты умеешь делать обычный день светлее — просто тем, что ты есть.</span></div>
+    <div class="reason"><span class="emoji">💬</span><span>С тобой интересно разговаривать. Даже о мелочах.</span></div>
+    <div class="reason"><span class="emoji">🔥</span><span>В тебе есть что-то такое, что невозможно не заметить — притягательность, которая чувствуется в каждом взгляде.</span></div>
+    <div class="reason"><span class="emoji">🎧</span><span>Ты умеешь слушать. Это редкость и очень ценно.</span></div>
+    <div class="reason"><span class="emoji">💃</span><span>Ты красива той красотой, которая не зависит от одежды или макияжа — она внутри, и она чувствуется.</span></div>
+    <div class="reason"><span class="emoji">🫶</span><span>Рядом с тобой как-то спокойно и легко.</span></div>
+    <div class="reason"><span class="emoji">🌹</span><span>В тебе сочетаются нежность и сила — и это по-настоящему притягивает.</span></div>
+    <div class="reason"><span class="emoji">💫</span><span>Ты умеешь быть собой — и это самое красивое.</span></div>
+  </section>
+
+  <!-- КОМПЛИМЕНТЫ -->
+  <section class="compliment-section">
+    <h2 class="compliment-title">Хочешь ещё комплимент? 💌</h2>
+    <div class="compliment-box" id="complimentBox">Нажми на кнопку — и получишь тёплые слова.</div>
+    <button class="btn" id="complimentBtn" style="margin-top: 24px;">Получить комплимент</button>
+  </section>
+
+  <!-- ФИНАЛ -->
+  <section class="final">
+    <p>«Хорошего вечера. Ты заслуживаешь больше тёплых слов, чем принято говорить просто так.»</p>
+    <button class="btn" onclick="window.scrollTo({top:0, behavior:'smooth'})">Наверх ↑</button>
+  </section>
+
+  <!-- ЛАЙТБОКС -->
+  <div class="lightbox" id="lightbox">
+    <span class="close" id="closeLightbox">×</span>
+    <img src="" alt="" id="lightboxImg" />
+  </div>
+
+<script>
+  // ===== Фоновые частицы =====
+  const particlesContainer = document.getElementById('particles');
+  const emojis = ['✨', '🌸', '💫', '🤍', '🌷', '⭐', '💖'];
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (10 + Math.random() * 14) + 's';
+    p.style.animationDelay = (Math.random() * 14) + 's';
+    p.style.fontSize = (12 + Math.random() * 24) + 'px';
+    p.style.opacity = 0.4 + Math.random() * 0.5;
+    particlesContainer.appendChild(p);
+  }
+
+  // ===== Плавное появление при скролле =====
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 90);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.photo-card, .reason').forEach(el => observer.observe(el));
+
+  // ===== Лайтбокс =====
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const closeBtn = document.getElementById('closeLightbox');
+
+  document.querySelectorAll('.photo-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const img = card.querySelector('img');
+      lightboxImg.src = img.src;
+      lightbox.classList.add('active');
+    });
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+  }
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox || e.target === closeBtn) closeLightbox();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // ===== Комплименты =====
+  const compliments = [
+    'Ты умеешь делать обычный день светлее — просто тем, что ты есть.',
+    'С тобой интересно разговаривать. Даже о мелочах.',
+    'В тебе есть что-то такое, что невозможно не заметить — притягательность, которая чувствуется в каждом взгляде.',
+    'Ты умеешь слушать. Это редкость и очень ценно.',
+    'Ты красива той красотой, которая не зависит от одежды или макияжа — она внутри, и она чувствуется.',
+    'Рядом с тобой как-то спокойно и легко.',
+    'В тебе сочетаются нежность и сила — и это по-настоящему притягивает.',
+    'Ты умеешь быть собой — и это самое красивое.',
+    'У тебя самая тёплая улыбка, которая остаётся в памяти надолго.',
+    'Ты — из тех людей, рядом с которыми хочется задержаться подольше.',
+    'В тебе есть магнетизм, который сложно объяснить словами.',
+    'Ты выглядишь так, что сбивается дыхание — и это не только про внешность.',
+    'У тебя редкое сочетание: красивая внешне и глубокая внутри.',
+    'С тобой хочется быть лучшей версией себя.',
+    'Ты — человек, которого хочется узнавать снова и снова.',
+    'Твоя уверенность и лёгкость делают тебя ещё красивее.',
+    'В тебе есть что-то, что цепляет с первого взгляда — и не отпускает.',
+    'Ты — та, о ком хочется думать после разговора.',
+    'У тебя красивая душа, и это видно даже в мелочах.',
+    'Ты умеешь быть разной — и в каждой версии ты прекрасна.'
+  ];
+
+  const box = document.getElementById('complimentBox');
+  const cBtn = document.getElementById('complimentBtn');
+  let lastIndex = -1;
+
+  cBtn.addEventListener('click', () => {
+    let i;
+    do { i = Math.floor(Math.random() * compliments.length); }
+    while (i === lastIndex && compliments.length > 1);
+    lastIndex = i;
+
+    box.classList.remove('pop');
+    void box.offsetWidth; // перезапуск анимации
+    box.textContent = compliments[i];
+    box.classList.add('pop');
+  });
+</script>
+</body>
+</html>
